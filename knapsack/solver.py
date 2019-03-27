@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from collections import namedtuple
+
+from opt_model import opt_model
 Item = namedtuple("Item", ['index', 'value', 'weight'])
     
 def solve_it(input_data):
@@ -24,16 +26,15 @@ def solve_it(input_data):
     # it takes items in-order until the knapsack is full
     value = 0
     weight = 0
-    taken = [0]*len(items)
+    taken, is_opt = opt_model(item_count, capacity, items)
 
-    for item in items:
-        if weight + item.weight <= capacity:
-            taken[item.index] = 1
+    for i, item in enumerate(items):
+        if taken[i]:
             value += item.value
             weight += item.weight
     
     # prepare the solution in the specified output format
-    output_data = str(value) + ' ' + str(0) + '\n'
+    output_data = str(value) + ' ' + str(is_opt) + '\n'
     output_data += ' '.join(map(str, taken))
     return output_data
 
